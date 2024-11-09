@@ -4,6 +4,9 @@ import time
 
 from opcua import client
 from client import OPCClient
+from datetime import datetime
+
+
 
 def main():
     finishFlag = False
@@ -18,6 +21,13 @@ def main():
         opcClient.ReceiveDataFromServer()
         time.sleep(timeInterval)
         print(opcClient.dataReceived)
+        finishFlag = opcClient.CheckConnection()
+
+    now = datetime.now()
+    current_time = now.strftime("%H-%M-%S")
+    filename = current_time + ".csv"
+    f = open(str(filename), "w")
+    f.write(opcClient.dataReceived)
 
 
 
