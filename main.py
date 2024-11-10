@@ -1,8 +1,7 @@
-import os
-import threading
+
 import time
 
-from opcua import client
+from FlagThread import FlagThread
 from client import OPCClient
 from datetime import datetime
 
@@ -14,20 +13,33 @@ def main():
 
     timeInterval = float(file.read())
     url = "opc.tcp://localhost:4841/freeopcua/server/"
+    opcclient = OPCClient()
+    opcData = ""
 
-    opcClient = OPCClient()
+    thread = FlagThread()
+    thread.start()
 
     while not finishFlag:
-        opcClient.ReceiveDataFromServer()
+        opcclient.ReceiveDataFromServer()
+
+        print(opcclient.dataReceived)
+
+
+        finishFlag = thread.value
+        print(finishFlag)
         time.sleep(timeInterval)
-        print(opcClient.dataReceived)
-        finishFlag = opcClient.CheckConnection()
+
+    opcData += opcclient.dataReceived
 
     now = datetime.now()
     current_time = now.strftime("%H-%M-%S")
     filename = current_time + ".csv"
-    f = open(str(filename), "w")
-    f.write(opcClient.dataReceived)
+
+
+    f = open(filename, "w")
+    f.write(opcData)
+    opcclient.CloseConnection()
+    exit(1)
 
 
 

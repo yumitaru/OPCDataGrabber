@@ -33,8 +33,8 @@ class OPCClient:
                 self.dataReceived += ","
         except Exception as e:
             print("Error during StartReception:", e)
-            # self.ConnectToServer()
-            self.client = None
+            self.ConnectToServer()
+            # self.client = None
         finally:
             self._nodeId = "ns=2;i="
 
@@ -53,8 +53,4 @@ class OPCClient:
             except ConnectionResetError:
                 print("Connection was reset. Attempting to reconnect...")
                 self.ConnectToServer()
-    def CheckConnection(self) -> BooleanVar:
-        if self.client is None:
-            return True
-        else:
-            return False
+
