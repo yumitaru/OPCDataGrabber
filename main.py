@@ -39,7 +39,6 @@ def main():
     f = open(filename, "w")
     f.write(opcData)
     opcclient.CloseConnection()
-    exit(1)
 
 
 
